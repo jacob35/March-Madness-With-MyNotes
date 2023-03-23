@@ -22,7 +22,7 @@ Rounds = ['1st Round', '2nd Round', 'Sweet 16', 'Elite 8', 'Final Four', 'Champi
 # Title for app
 st.set_page_config(layout="wide")
 
-st.markdown("<h1 style='text-align: center; color: blue;'>March Madness Tool (2023) - With Jake's Notes</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: blue;'>March Madness Tool (2023) - With Notes</h1>", unsafe_allow_html=True)
 
 # Team Lists and Dictionary
 teams = df_team['School'].values
@@ -213,7 +213,7 @@ df_color_all= df_seed_stats.style.apply(color_coding_all, axis=1).format(d3)
 st.table(df_color_all)
 
 # Notes
-if st.button("__Click to see Jake's Notes__"):
+if st.button("__Click to see notes__"):
     st.header('Notes (Including 2022 March Madness Data)')
     st.write('__:red[Read and use at your own risk. This is only historical data. This does not predict future results.]__')
 

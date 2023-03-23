@@ -117,7 +117,7 @@ df_def.index = range(1,len(df_def)+1)
 
 # Finding teams with specific Off. and Def. Efficiencies
 st.header('Offensive and Defensive Efficiency Ranks')
-st.write('__Choose your offensive and defensive efficieny ranks. The team(s) that fit those parameters will display below__')
+st.write('__Choose your offensive and defensive efficiency ranks. The team(s) that fit those parameters will display below__')
 
 Off_Rank = df_team_ratings['Off. Rank'].values
 Def_Rank = df_team_ratings['Def. Rank'].values

@@ -245,8 +245,8 @@ st.table(df_def)
 
 # Links and References
 st.header('References')
-st.write("Team Statistics [link](https://www.sports-reference.com/cbb/seasons/men/2023-advanced-school-stats.html)")
-st.write("Seed Odds/Statistics [link](https://www.betfirm.com/seeds-national-championship-odds/)")
+st.write("Team Statistics Data [link](https://www.sports-reference.com/cbb/seasons/men/2023-advanced-school-stats.html)")
+st.write("Seed Odds/Statistics Data [link](https://www.betfirm.com/seeds-national-championship-odds/)")
 st.write("1 seed Final Four apperances [link](https://www.ncaa.com/webview/news%3Abasketball-men%3Abracketiq%3A2023-03-14%3Aheres-how-many-no-1-seeds-you-should-pick-your-ncaa-tournament-bracket#:~:text=1%20seeds%20make%20the%20Final,Four%20in%2019%20NCAA%20tournaments)")
 st.write("Upsets [link](https://www.ncaa.com/news/basketball-men/bracketiq/2018-03-13/heres-how-pick-march-madness-upsets-according-data?amp)")
 st.write("ESPN upset stats [link](https://www.espn.com/mens-college-basketball/story/_/id/35719396/2023-march-madness-bracket-facts-men-ncaa-tournament)")

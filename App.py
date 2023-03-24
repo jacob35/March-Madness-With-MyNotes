@@ -22,7 +22,7 @@ Rounds = ['1st Round', '2nd Round', 'Sweet 16', 'Elite 8', 'Final Four', 'Champi
 # Title for app
 st.set_page_config(layout="wide")
 
-st.markdown("<h1 style='text-align: center; color: blue;'>March Madness Tool (2023) - With Notes</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: blue;'>March Madness Tool (2023)</h1>", unsafe_allow_html=True)
 
 # Team Lists and Dictionary
 teams = df_team['School'].values
@@ -119,11 +119,22 @@ df_def.index = range(1,len(df_def)+1)
 st.header('Offensive and Defensive Efficiency Ranks')
 st.write('__Choose your offensive and defensive efficiency ranks. The team(s) that fit those parameters will display below__')
 
-Off_Rank = df_team_ratings['Off. Rank'].values
-Def_Rank = df_team_ratings['Def. Rank'].values
-Net_Rank = df_team_ratings['Net Rank'].values
+# Get Off. and Def. Rank for only the teams in the tournament
+Off_Rank = []
+Def_Rank = []
+Net_Rank = []
+Schools  = []
+
+for i in range(len(teams)):
+    for j in range(len(df_team_ratings['School'].values)):
+        if teams[i] == df_team_ratings['School'][j]:
+            Schools.append(df_team_ratings['School'][j]) 
+            Off_Rank.append(df_team_ratings['Off. Rank'][j])
+            Def_Rank.append(df_team_ratings['Def. Rank'][j])
+            Net_Rank.append(df_team_ratings['Net Rank'][j])
+
 max_Off = int(max(Off_Rank))     # maximum offensive efficiency rank
-max_Def = int(max(Def_Rank))
+max_Def = int(max(Def_Rank))     # maximum defensive efficiency rank
 one = 1
 
 col1, col2 = st.columns(2)
@@ -149,7 +160,7 @@ else:
 
     for i in range(len(Off_Rank)):
         if int(Off_Rank[i]) <= input_off and int(Def_Rank[i]) <= input_def:
-            name = df_team_ratings['School'][i]
+            name = Schools[i]
             seed = team_seed_dict[name]
 
             # Append Lists
@@ -162,7 +173,7 @@ else:
     # Create Dataframe
     zip = list(zip(rank_names, rank_seed, rank_off, rank_def, rank_net))
     rank_df = pd.DataFrame(zip, columns = ['School', 'Seed', 'Off. Rank', 'Def. Rank', 'Net Rank'])
-    rank_df_sort = rank_df.sort_values('Net Rank')
+    rank_df_sort = rank_df.sort_values('School')
     rank_df_sort.index = range(1,len(rank_df_sort)+1)
     if rank_df_sort.empty:
         st.write(':red[No teams fit this criteria]')
@@ -204,40 +215,13 @@ if choose_round == '1st Round':
 
 # Seed Odds
 st.write('__Odds to advance to each round of the tournament by Bracket Seed__', "- Ex: 64% of number 5 seeds make it to the second round, but only 5% make the Final Four (about 1 every 5 years)")
-st.write('True Odds - The probabilities that at least one of the four teams at that seed wins the National Championship',('There is a 65% chance that one of the number 1 seeds wins the National Championship'))
+st.write('True Odds - The probabilities that at least one of the four teams at that seed wins the National Championship','(There is a 65% chance that one of the number 1 seeds wins the National Championship)')
 st.write(':blue[Light Blue] = ', team_1, ' is a ', seed_1, ' seed')
 st.write(':green[Light Green] = ', team_2, ' is a ', seed_2, ' seed')
 df_seed_stats.index = range(1,len(df_seed_stats)+1)
 d3 = dict.fromkeys(df_seed_stats.select_dtypes('float').columns, "{:.1%}")
 df_color_all= df_seed_stats.style.apply(color_coding_all, axis=1).format(d3)
 st.table(df_color_all)
-
-# Notes
-if st.button("__Click to see notes__"):
-    st.header('Notes (Including 2022 March Madness Data)')
-    st.write('__:red[Read and use at your own risk. This is only historical data. This does not predict future results.]__')
-
-    # Picking a winner
-    st.write('__Picking The Winner__')
-    st.write('1. Have one or two 1 seed(s) in your final 4 (see 1 seed Final Four apperances link below).')
-    st.write('2. Choose a one seed to win it or at least a 2 or 3 seed.')
-    st.write('3. From the past 19 champions, they have averaged an offensive efficiency rank of 6.7 and defensive efficiency rank of 9.1')
-
-    # Picking Final 4 Teams
-    st.write('__Picking Your Final 4 Teams__')
-    st.write('1. Final 4 teams should be in the top 25 in both offensive and defensive efficieny ranks. The offense is a little more impartant than the defense.')
-
-    # 1st Round Upsets
-    st.write('__1st Round Upsets__')
-    st.write('1. It is a 50/50 chance between the 8 and 9 seed.')
-    st.write('2. The 5, 6, and 7 seeds are all in the 30-40% chances of being upset. You should probably pick one upset for each of these seeds.')
-
-    # 2nd round upsets
-    st.write('__2nd Round Upsets__')
-    st.write('1. One 1 seed is upset in the 2nd round by an 8 or 9 about every other year.')
-    st.write('2. A 7 or 10 seed have upset a 2 seed in the 2nd round about once per year.')
-    st.write('3. A 6 or 11 seed have upset a 3 seed in the 2nd round about once per year.')
-    st.write('4. 95% of the past tournamets a double-digit seed has made it to the Sweet 16.')
 
 # Printing Stat Definitions
 st.header('Statistic Definitions')
@@ -247,8 +231,3 @@ st.table(df_def)
 st.header('References')
 st.write("Team Statistics Data [link](https://www.sports-reference.com/cbb/seasons/men/2023-advanced-school-stats.html)")
 st.write("Seed Odds/Statistics Data [link](https://www.betfirm.com/seeds-national-championship-odds/)")
-st.write("1 seed Final Four apperances [link](https://www.ncaa.com/webview/news%3Abasketball-men%3Abracketiq%3A2023-03-14%3Aheres-how-many-no-1-seeds-you-should-pick-your-ncaa-tournament-bracket#:~:text=1%20seeds%20make%20the%20Final,Four%20in%2019%20NCAA%20tournaments)")
-st.write("Upsets [link](https://www.ncaa.com/news/basketball-men/bracketiq/2018-03-13/heres-how-pick-march-madness-upsets-according-data?amp)")
-st.write("ESPN upset stats [link](https://www.espn.com/mens-college-basketball/story/_/id/35719396/2023-march-madness-bracket-facts-men-ncaa-tournament)")
-st.write("Final 4 and Champion Def. and Off Eff. [link](https://www.collegebasketballtimes.com/post/men-s-ncaa-tournament-breakdown-by-the-numbers), \
-    [other link](https://bleacherreport.com/articles/1566728-highlighting-historical-indicators-of-march-madness-success)")
